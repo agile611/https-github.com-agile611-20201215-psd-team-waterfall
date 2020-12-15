@@ -168,7 +168,7 @@ class App
 
             if ($myFleetSunk)
             {
-                printf("You lost!");
+                self::$console->println("You lost!");
                 exit();
             }
 
@@ -183,7 +183,7 @@ class App
 
             if ($enemyFleetSunk)
             {
-                printf("You won!");
+                self::$console->println("You won!");
                 exit();
             }
         }
