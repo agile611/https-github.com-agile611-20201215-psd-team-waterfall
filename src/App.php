@@ -139,6 +139,22 @@ class App
             echo $isHit ? "Yeah ! Nice hit !" : "Miss";
             self::$console->println();
 
+
+            $enemyFleetSunk = true;
+            foreach (self::$enemyFleet as $ship)
+            {
+                if (!$ship->isSunk()) {
+                    $enemyFleetSunk = false;
+                    break;
+                }
+            }
+
+            if ($enemyFleetSunk)
+            {
+                self::$console->println("\nYou are the winner!");
+                exit();
+            }
+
             $position = self::getRandomPosition();
             $isHit = GameController::checkIsHit(self::$myFleet, $position);
             self::$console->println();
@@ -155,36 +171,20 @@ class App
                 self::$console->println("                 -\\  \\     /  /-");
                 self::$console->println("                   \\  \\   /  /");
 
-            }
-
-            $myFleetSunk = true;
-            foreach (self::$myFleet as $ship)
-            {
-                if (!$ship->isSunk()) {
-                    $myFleetSunk = false;
-                    break;
+                $myFleetSunk = true;
+                foreach (self::$myFleet as $ship)
+                {
+                    if (!$ship->isSunk()) {
+                        $myFleetSunk = false;
+                        break;
+                    }
                 }
-            }
 
-            if ($myFleetSunk)
-            {
-                self::$console->println("You lost!");
-                exit();
-            }
-
-            $enemyFleetSunk = true;
-            foreach (self::$enemyFleet as $ship)
-            {
-                if (!$ship->isSunk()) {
-                    $enemyFleetSunk = false;
-                    break;
+                if ($myFleetSunk)
+                {
+                    self::$console->println("\nYou lost!");
+                    exit();
                 }
-            }
-
-            if ($enemyFleetSunk)
-            {
-                self::$console->println("You are the winner!");
-                exit();
             }
         }
     }

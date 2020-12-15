@@ -21,15 +21,13 @@ class GameController
 
         foreach ($fleet as $ship) {
             foreach ($ship->getPositions() as $position) {
-                if ($position->isHit()) {
-                    $console->println("This field has already been hit. Choose another one.");
-
-                    return false;
-                }
-
                 if ($position == $shot) {
-                    $ship->shoot($shot);
+                    if ($position->isHit()) {
+                        $console->println("This field has already been hit. Choose another one.");
+                        return false;
+                    }
 
+                    $ship->shoot($shot);
                     return true;
                 }
             }
