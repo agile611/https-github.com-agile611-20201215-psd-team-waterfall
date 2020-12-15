@@ -85,10 +85,10 @@ class App
      */
     public static function InitializeFieldSize() {
         while(true) {
-            self::$console->println("Please enter the field width (min: 5, max: 26):");
+            self::$console->println("Please enter the field width (min: " . self::$fieldMin . ", max: " . self::$fieldMax . "):");
             $input = (int)readline("");
             if($input < self::$fieldMin|| $input > self::$fieldMax) {
-                self::$console->println("Wrong field length");
+                self::$console->println("Wrong field width");
             }
             else {
                 self::$currentWidth = $input;
@@ -96,10 +96,10 @@ class App
             }
         }
         while(true) {
-            self::$console->println("Please enter the field height (min: 5, max: 26):");
+            self::$console->println("Please enter the field height (min: " . self::$fieldMin . ", max: " . self::$fieldMax . "):");
             $input = (int)readline("");
             if($input < self::$fieldMin|| $input > self::$fieldMax) {
-                self::$console->println("Wrong field length");
+                self::$console->println("Wrong field height");
             }
             else {
                 self::$currentHeight = $input;
