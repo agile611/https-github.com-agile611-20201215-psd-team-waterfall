@@ -9,6 +9,7 @@ class Position
      */
     private $column;
     private $row;
+    private $isHit;
 
     /**
      * Position constructor.
@@ -19,6 +20,7 @@ class Position
     {
         $this->column = Letter::validate(strtoupper($letter));
         $this->row = $number;
+        $this->isHit = false;
     }
 
     public function getColumn()
@@ -36,5 +38,13 @@ class Position
         return sprintf("%s%s", $this->column, $this->row);
     }
 
+    public function isHit()
+    {
+        return $this->isHit;
+    }
 
+    public function hit()
+    {
+        $this->isHit = true;
+    }
 }

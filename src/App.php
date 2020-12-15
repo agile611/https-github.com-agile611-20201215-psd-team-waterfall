@@ -157,7 +157,35 @@ class App
 
             }
 
-//            exit();
+            $myFleetSunk = true;
+            foreach (self::$myFleet as $ship)
+            {
+                if (!$ship->isSunk()) {
+                    $myFleetSunk = false;
+                    break;
+                }
+            }
+
+            if ($myFleetSunk)
+            {
+                self::$console->println("You lost!");
+                exit();
+            }
+
+            $enemyFleetSunk = true;
+            foreach (self::$enemyFleet as $ship)
+            {
+                if (!$ship->isSunk()) {
+                    $enemyFleetSunk = false;
+                    break;
+                }
+            }
+
+            if ($enemyFleetSunk)
+            {
+                self::$console->println("You won!");
+                exit();
+            }
         }
     }
 

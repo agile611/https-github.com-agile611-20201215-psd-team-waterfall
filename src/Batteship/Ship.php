@@ -59,4 +59,23 @@ class Ship
         $this->size = $size;
     }
 
+    public function shoot($shot)
+    {
+        foreach ($this->positions as $position) {
+            if ($position == $shot) {
+                $position->hit();
+                return;
+            }
+        }
+    }
+
+    public function isSunk()
+    {
+        foreach ($this->positions as $position) {
+            if (!$position->isHit()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
