@@ -183,7 +183,7 @@ class App
 
             if ($enemyFleetSunk)
             {
-                self::$console->println("You won!");
+                self::$console->println("You are the winner!");
                 exit();
             }
         }
