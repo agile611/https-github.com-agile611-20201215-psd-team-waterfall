@@ -201,7 +201,7 @@ class App
     public static function parsePosition($input)
     {
         $letter = substr($input, 0, 1);
-        $number = substr($input, 1, 1);
+        $number = (int)filter_var($input, FILTER_SANITIZE_NUMBER_INT);
 
         if(!is_numeric($number)) {
             throw new Exception("Not a number: $number");
