@@ -8,6 +8,8 @@
         <testsuite name="Battleship GameController tests">
             <directory>test/</directory>
             <file>test/Battleship/GameControllerTests.php</file>
+            <file>test/Battleship/PositionTests.php</file>
+            <file>test/Battleship/ShipTests.php</file>
         </testsuite>
     </testsuites>
     <logging>
