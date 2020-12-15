@@ -207,6 +207,16 @@ class App
             throw new Exception("Not a number: $number");
         }
 
+        list($rows, $lines) = self::getFieldSize();
+
+        if($number > $lines) {
+            throw new Exception("Out of a game field: $number");
+        }
+        
+        if(!in_array($letter, Letter::$letters) ||  array_search($letter, Letter::$letters) > $rows ) {
+            throw new Exception("Out of a game field: $number");
+        }
+
         return new Position($letter, $number);
     }
 }
