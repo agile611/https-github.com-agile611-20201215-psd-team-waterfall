@@ -10,10 +10,6 @@ class App
     private static $myFleet = array();
     private static $enemyFleet = array();
     private static $console;
-    private static $fieldMin = 5;
-    private static $fieldMax = 26;
-    private static $currentWidth;
-    private static $currentHeight;
 
     static function run()
     {
@@ -66,13 +62,10 @@ class App
         array_push(self::$enemyFleet[4]->getPositions(), new Position('C', 6));
     }
 
-    public static function getFieldSize() {
-        return [self::$currentWidth, self::$currentHeight];
-    }
-
     public static function getRandomPosition()
     {
-        list($rows, $lines) = self::getFieldSize();
+        $rows = 8;
+        $lines = 8;
 
         $letter = Letter::value(random_int(0, $lines - 1));
         $number = random_int(0, $rows - 1);
@@ -80,40 +73,10 @@ class App
         return new Position($letter, $number);
     }
 
-    /**
-     * Initialize game field size.
-     */
-    public static function InitializeFieldSize() {
-        while(true) {
-            self::$console->println("Please enter the field width (min: " . self::$fieldMin . ", max: " . self::$fieldMax . "):");
-            $input = (int)readline("");
-            if($input < self::$fieldMin|| $input > self::$fieldMax) {
-                self::$console->println("Wrong field width");
-            }
-            else {
-                self::$currentWidth = $input;
-                break;
-            }
-        }
-        while(true) {
-            self::$console->println("Please enter the field height (min: " . self::$fieldMin . ", max: " . self::$fieldMax . "):");
-            $input = (int)readline("");
-            if($input < self::$fieldMin|| $input > self::$fieldMax) {
-                self::$console->println("Wrong field height");
-            }
-            else {
-                self::$currentHeight = $input;
-                break;
-            }
-        }
-    }
-
     public static function InitializeMyFleet()
     {
-
-        self::InitializeFieldSize();
-
         self::$myFleet = GameController::initializeShips();
+
         self::$console->println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
 
         foreach (self::$myFleet as $ship) {
@@ -229,20 +192,10 @@ class App
     public static function parsePosition($input)
     {
         $letter = substr($input, 0, 1);
-        $number = (int)filter_var($input, FILTER_SANITIZE_NUMBER_INT);
+        $number = substr($input, 1, 1);
 
         if(!is_numeric($number)) {
             throw new Exception("Not a number: $number");
-        }
-
-        list($rows, $lines) = self::getFieldSize();
-
-        if($number > $lines) {
-            throw new Exception("Out of a game field: $number");
-        }
-        
-        if(!in_array($letter, Letter::$letters) ||  array_search($letter, Letter::$letters) > $rows ) {
-            throw new Exception("Out of a game field: $number");
         }
 
         return new Position($letter, $number);
