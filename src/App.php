@@ -10,6 +10,10 @@ class App
     private static $myFleet = array();
     private static $enemyFleet = array();
     private static $console;
+    private static $fieldMin = 5;
+    private static $fieldMax = 26;
+    private static $currentWidth;
+    private static $currentHeight;
 
     static function run()
     {
@@ -62,10 +66,13 @@ class App
         array_push(self::$enemyFleet[4]->getPositions(), new Position('C', 6));
     }
 
+    public static function getFieldSize() {
+        return [self::$currentWidth, self::$currentHeight];
+    }
+
     public static function getRandomPosition()
     {
-        $rows = 8;
-        $lines = 8;
+        list($rows, $lines) = self::getFieldSize();
 
         $letter = Letter::value(random_int(0, $lines - 1));
         $number = random_int(0, $rows - 1);
@@ -73,10 +80,40 @@ class App
         return new Position($letter, $number);
     }
 
+    /**
+     * Initialize game field size.
+     */
+    public static function InitializeFieldSize() {
+        while(true) {
+            self::$console->println("Please enter the field width (min: 5, max: 26):");
+            $input = (int)readline("");
+            if($input < self::$fieldMin|| $input > self::$fieldMax) {
+                self::$console->println("Wrong field length");
+            }
+            else {
+                self::$currentWidth = $input;
+                break;
+            }
+        }
+        while(true) {
+            self::$console->println("Please enter the field height (min: 5, max: 26):");
+            $input = (int)readline("");
+            if($input < self::$fieldMin|| $input > self::$fieldMax) {
+                self::$console->println("Wrong field length");
+            }
+            else {
+                self::$currentHeight = $input;
+                break;
+            }
+        }
+    }
+
     public static function InitializeMyFleet()
     {
-        self::$myFleet = GameController::initializeShips();
 
+        self::InitializeFieldSize();
+
+        self::$myFleet = GameController::initializeShips();
         self::$console->println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
 
         foreach (self::$myFleet as $ship) {
