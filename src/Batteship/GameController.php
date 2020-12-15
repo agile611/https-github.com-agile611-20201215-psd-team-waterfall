@@ -7,9 +7,10 @@ use InvalidArgumentException;
 
 class GameController
 {
-
     public static function checkIsHit(array $fleet, $shot)
     {
+        $console = new Console();
+
         if ($fleet == null) {
             throw new InvalidArgumentException("ships is null");
         }
@@ -20,15 +21,24 @@ class GameController
 
         foreach ($fleet as $ship) {
             foreach ($ship->getPositions() as $position) {
+<<<<<<< HEAD
                 if ($position->isHit()) {
                     $console = new Console();
                     $console->println("This field has already been hit. Choose another one.");
+=======
+                if ($position->isHit) {
+                    $console->println("this field is already hit. choose another one.");
+>>>>>>> 9bdd7d5... Instantiate Console class outside of foreach loop
 
                     return false;
                 }
 
                 if ($position == $shot) {
+<<<<<<< HEAD
                     $ship->shoot($shot);
+=======
+                    $position->isHit = true;
+>>>>>>> 9bdd7d5... Instantiate Console class outside of foreach loop
 
                     return true;
                 }
