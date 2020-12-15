@@ -2,6 +2,7 @@
 
 namespace Battleship;
 
+use Console;
 use InvalidArgumentException;
 
 class GameController
@@ -19,7 +20,15 @@ class GameController
 
         foreach ($fleet as $ship) {
             foreach ($ship->getPositions() as $position) {
+                if ($position->isHit) {
+                    $console = new Console();
+                    $console->println("this field is already hit. choose another one.");
+
+                    return false;
+                }
+
                 if ($position == $shot) {
+                    $position->isHit = true;
                     return true;
                 }
             }
