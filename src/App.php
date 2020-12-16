@@ -73,6 +73,39 @@ class App
         return new Position($letter, $number);
     }
 
+
+    /**
+     * Initialize game field size.
+     */
+    public static function InitializeFieldSize() {
+        while(true) {
+            self::$console->println("Please enter the field width (min: " . self::$fieldMin . ", max: " . self::$fieldMax . "):");
+            $input = (int)readline("");
+            if($input < self::$fieldMin|| $input > self::$fieldMax) {
+                self::$console->setForegroundColor(Color::RED);
+                self::$console->println("Wrong field width");
+                self::$console->resetForegroundColor();
+            }
+            else {
+                self::$currentWidth = $input;
+                break;
+            }
+        }
+        while(true) {
+            self::$console->println("Please enter the field height (min: " . self::$fieldMin . ", max: " . self::$fieldMax . "):");
+            $input = (int)readline("");
+            if($input < self::$fieldMin|| $input > self::$fieldMax) {
+                self::$console->setForegroundColor(Color::RED);
+                self::$console->println("Wrong field height");
+                self::$console->resetForegroundColor();
+            }
+            else {
+                self::$currentHeight = $input;
+                break;
+            }
+        }
+    }
+
     public static function InitializeMyFleet()
     {
         self::$myFleet = GameController::initializeShips();
