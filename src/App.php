@@ -163,68 +163,77 @@ class App
             self::$console->println("Enter coordinates for your shot :");
             $position = readline("");
 
-            $isHit = GameController::checkIsHit(self::$enemyFleet, self::parsePosition($position));
-            if ($isHit) {
-                self::beep();
-                self::$console->println("                \\         .  ./");
-                self::$console->println("              \\      .:\" \";'.:..\" \"   /");
-                self::$console->println("                  (M^^.^~~:.'\" \").");
-                self::$console->println("            -   (/  .    . . \\ \\)  -");
-                self::$console->println("               ((| :. ~ ^  :. .|))");
-                self::$console->println("            -   (\\- |  \\ /  |  /)  -");
-                self::$console->println("                 -\\  \\     /  /-");
-                self::$console->println("                   \\  \\   /  /");
-            }
+            try {
+                $parsedPosition = self::parsePosition($position);
 
-            echo $isHit ? "Yeah ! Nice hit !" : "Miss";
-            self::$console->println();
-
-
-            $enemyFleetSunk = true;
-            foreach (self::$enemyFleet as $ship)
-            {
-                if (!$ship->isSunk()) {
-                    $enemyFleetSunk = false;
-                    break;
+                $isHit = GameController::checkIsHit(self::$enemyFleet, $parsedPosition);
+                if ($isHit) {
+                    self::beep();
+                    self::$console->println("                \\         .  ./");
+                    self::$console->println("              \\      .:\" \";'.:..\" \"   /");
+                    self::$console->println("                  (M^^.^~~:.'\" \").");
+                    self::$console->println("            -   (/  .    . . \\ \\)  -");
+                    self::$console->println("               ((| :. ~ ^  :. .|))");
+                    self::$console->println("            -   (\\- |  \\ /  |  /)  -");
+                    self::$console->println("                 -\\  \\     /  /-");
+                    self::$console->println("                   \\  \\   /  /");
                 }
-            }
 
-            if ($enemyFleetSunk)
-            {
-                self::$console->println("\nYou are the winner!");
-                exit();
-            }
+                echo $isHit ? "Yeah ! Nice hit !" : "Miss";
+                self::$console->println();
 
-            $position = self::getRandomPosition();
-            $isHit = GameController::checkIsHit(self::$myFleet, $position);
-            self::$console->println();
-            printf("Computer shoot in %s%s and %s", $position->getColumn(), $position->getRow(), $isHit ? "hit your ship !\n" : "miss");
-            if ($isHit) {
-                self::beep();
 
-                self::$console->println("                \\         .  ./");
-                self::$console->println("              \\      .:\" \";'.:..\" \"   /");
-                self::$console->println("                  (M^^.^~~:.'\" \").");
-                self::$console->println("            -   (/  .    . . \\ \\)  -");
-                self::$console->println("               ((| :. ~ ^  :. .|))");
-                self::$console->println("            -   (\\- |  \\ /  |  /)  -");
-                self::$console->println("                 -\\  \\     /  /-");
-                self::$console->println("                   \\  \\   /  /");
-
-                $myFleetSunk = true;
-                foreach (self::$myFleet as $ship)
+                $enemyFleetSunk = true;
+                foreach (self::$enemyFleet as $ship)
                 {
                     if (!$ship->isSunk()) {
-                        $myFleetSunk = false;
+                        $enemyFleetSunk = false;
                         break;
                     }
                 }
 
-                if ($myFleetSunk)
+                if ($enemyFleetSunk)
                 {
-                    self::$console->println("\nYou lost!");
+                    self::$console->println("\nYou are the winner!");
                     exit();
                 }
+
+                $position = self::getRandomPosition();
+                $isHit = GameController::checkIsHit(self::$myFleet, $position);
+                self::$console->println();
+                printf("Computer shoot in %s%s and %s", $position->getColumn(), $position->getRow(), $isHit ? "hit your ship !\n" : "miss");
+                if ($isHit) {
+                    self::beep();
+
+                    self::$console->println("                \\         .  ./");
+                    self::$console->println("              \\      .:\" \";'.:..\" \"   /");
+                    self::$console->println("                  (M^^.^~~:.'\" \").");
+                    self::$console->println("            -   (/  .    . . \\ \\)  -");
+                    self::$console->println("               ((| :. ~ ^  :. .|))");
+                    self::$console->println("            -   (\\- |  \\ /  |  /)  -");
+                    self::$console->println("                 -\\  \\     /  /-");
+                    self::$console->println("                   \\  \\   /  /");
+
+                    $myFleetSunk = true;
+                    foreach (self::$myFleet as $ship)
+                    {
+                        if (!$ship->isSunk()) {
+                            $myFleetSunk = false;
+                            break;
+                        }
+                    }
+
+                    if ($myFleetSunk)
+                    {
+                        self::$console->println("\nYou lost!");
+                        exit();
+                    }
+                }
+            }
+            catch(Exception $exception) {
+                self::$console->setForegroundColor(Color::RED);
+                self::$console->println($exception->getMessage());
+                self::$console->resetForegroundColor();
             }
         }
     }
@@ -241,7 +250,7 @@ class App
         list($rows, $lines) = self::getFieldSize();
 
         if($number < 1 || $number > $lines) {
-            throw new Exception("Out of a game field. Number: $number");
+            throw new Exception("Out of a game field. Your number: $number, maximum number: " . self::$currentWidth);
         }
 
         if(!in_array($letter, Letter::$letters)) {
@@ -249,7 +258,7 @@ class App
         }
 
         if(array_search($letter, Letter::$letters) >= $rows ) {
-            throw new Exception("Out of a game field. Letter: $letter");
+            throw new Exception("Out of a game field. Your letter: $letter, maximum letter: " . Letter::$letters[self::$currentHeight-1]);
         }
         return new Position($letter, $number);
     }
