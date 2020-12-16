@@ -72,10 +72,8 @@ class App
 
     public static function getRandomPosition()
     {
-        list($rows, $lines) = self::getFieldSize();
-
-        $letter = Letter::value(random_int(0, $lines - 1));
-        $number = random_int(0, $rows - 1);
+        $letter = Letter::value(random_int(0, self::$currentWidth - 1));
+        $number = random_int(0, self::$currentWidth - 1);
 
         return new Position($letter, $number);
     }
@@ -247,9 +245,7 @@ class App
             throw new Exception("Not a number: $number");
         }
 
-        list($rows, $lines) = self::getFieldSize();
-
-        if($number < 1 || $number > $lines) {
+        if($number < 1 || $number > self::$currentWidth) {
             throw new Exception("Out of a game field. Your number: $number, maximum number: " . self::$currentWidth);
         }
 
@@ -257,7 +253,7 @@ class App
             throw new Exception("Letter not exist: $letter");
         }
 
-        if(array_search($letter, Letter::$letters) >= $rows ) {
+        if(array_search($letter, Letter::$letters) >= self::$currentHeight ) {
             throw new Exception("Out of a game field. Your letter: $letter, maximum letter: " . Letter::$letters[self::$currentHeight-1]);
         }
         return new Position($letter, $number);
