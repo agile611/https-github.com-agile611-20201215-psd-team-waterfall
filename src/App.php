@@ -76,8 +76,7 @@ class App
     public static function InitializeMyFleet()
     {
         self::$myFleet = GameController::initializeShips();
-
-        self::$console->println("Please position your fleet (Game board has size from A to H and 1 to 8) :");
+        self::$console->println("Please position your fleet (Game board has size from A to " . Letter::$letters[self::$currentWidth - 1] . " and 1 to " . self::$currentHeight . ") :");
 
         foreach (self::$myFleet as $ship) {
 
@@ -191,13 +190,26 @@ class App
 
     public static function parsePosition($input)
     {
-        $letter = substr($input, 0, 1);
-        $number = substr($input, 1, 1);
+        $letter = strtoupper(substr($input, 0, 1));
+        $number = (int)filter_var($input, FILTER_SANITIZE_NUMBER_INT);
 
         if(!is_numeric($number)) {
             throw new Exception("Not a number: $number");
         }
 
+        list($rows, $lines) = self::getFieldSize();
+
+        if($number < 1 || $number > $lines) {
+            throw new Exception("Out of a game field. Number: $number");
+        }
+
+        if(!in_array($letter, Letter::$letters)) {
+            throw new Exception("Letter not exist: $letter");
+        }
+
+        if(array_search($letter, Letter::$letters) >= $rows ) {
+            throw new Exception("Out of a game field. Letter: $letter");
+        }
         return new Position($letter, $number);
     }
 }
